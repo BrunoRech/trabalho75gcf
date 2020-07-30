@@ -1,0 +1,36 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js init
+
+PATH: 
+  C:\Users\bruno.rech\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\mingw64\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\usr\local\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\usr\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\usr\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\mingw64\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\usr\bin;C:\Users\bruno.rech\bin;C:\Python38\Scripts;C:\Python38;C:\Python27;C:\Python27\Scripts;C:\Delphi7\Bin;C:\Delphi7\Projects\Bpl;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn;C:\Program Files\TortoiseSVN\bin;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn;C:\Program Files\Microsoft SQL Server\140\Tools\Binn;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn;C:\Program Files\Microsoft SQL Server\140\DTS\Binn;C:\ProgramData\chocolatey\bin;C:\Android\Sdk\platform-tools;C:\Android\Sdk\tools;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Program Files\k6;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\Yarn\bin;C:\Program Files\nodejs;C:\Program Files\Java\jdk1.8.0_211\bin;C:\Gradle\gradle-6.5.1\bin;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\bruno.rech\AppData\Local\Microsoft\WindowsApps;C:\Users\bruno.rech\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\bruno.rech\AppData\Local\Programs\Git\cmd;C:\Users\bruno.rech\AppData\Local\Yarn\bin;C:\Users\bruno.rech\AppData\Roaming\npm;C:\Users\bruno.rech\AppData\Local\Programs\Git\usr\bin\vendor_perl;C:\Users\bruno.rech\AppData\Local\Programs\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.18.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:137008:13)
+      at Interface.emit (events.js:315:20)
+      at Interface._ttyWrite (readline.js:866:16)
+      at ReadStream.onkeypress (readline.js:205:10)
+      at ReadStream.emit (events.js:315:20)
+      at emitKeys (internal/readline/utils.js:335:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1133:36)
+      at ReadStream.emit (events.js:315:20)
+      at addChunk (_stream_readable.js:295:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
