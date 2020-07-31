@@ -1,21 +1,14 @@
 import { Router } from 'express';
+import ProductsController from '../controllers/ProductsController';
 
 const productsRouter = Router();
 
-productsRouter.get('/', (req, res) => {
-  return res.json('get');
-});
-productsRouter.get('/:id', (req, res) => {
-  return res.json('get');
-});
-productsRouter.post('/', (req, res) => {
-  return res.json('post');
-});
-productsRouter.put('/:id', (req, res) => {
-  return res.json('put');
-});
-productsRouter.delete('/:id', (req, res) => {
-  return res.json('delete');
-});
+const productsController = new ProductsController();
+
+productsRouter.get('/', productsController.list);
+productsRouter.get('/:id', productsController.show);
+productsRouter.post('/', productsController.create);
+productsRouter.put('/:id', productsController.update);
+productsRouter.delete('/:id', productsController.delete);
 
 export default productsRouter;
