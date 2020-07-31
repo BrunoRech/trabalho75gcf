@@ -38,7 +38,8 @@ class ProductsController {
     const { manufacturer, description } = request.body;
 
     const productsRepository = getRepository(Product);
-    const product = await productsRepository.update(id, {
+    const product = await productsRepository.save({
+      id,
       manufacturer,
       description,
     });
