@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { Menu as SemanticMenu } from "semantic-ui-react";
-import { MenuContainer } from "./styles";
+import { MenuContainer, Link } from "./styles";
 
 const { Item } = SemanticMenu;
 
@@ -10,9 +9,11 @@ const Menu = () => {
 
   const items = [
     {
+      name: "Dashboard",
+      to: "/",
+    },
+    {
       name: "Produtos",
-      active: activeItem === "Produtos",
-      onClick: () => setActive("Produtos"),
       to: "/produtos",
     },
   ];
@@ -20,8 +21,8 @@ const Menu = () => {
   return (
     <MenuContainer>
       <SemanticMenu vertical text>
-        {items.map(({ name, active, onClick, to }) => (
-          <Item active={active} onClick={onClick}>
+        {items.map(({ name, to }) => (
+          <Item active={name === activeItem} onClick={() => setActive(name)}>
             <Link to={to}>{name}</Link>
           </Item>
         ))}

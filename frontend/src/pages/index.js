@@ -1,4 +1,4 @@
 import Dashboard from "./Dashboard";
-import CadastroProduto from "./CadastroProduto";
+import CadastroProduto from "./Produtos";
 
 export { Dashboard, CadastroProduto};
