@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Table, Modal, Button, Icon } from "semantic-ui-react";
-import FormProduto from "../../components/forms/FormProduto";
+import ProductForm from "../../components/forms/ProductForm";
 import api from "../../components/services/api";
-import { Container } from "./styles";
+import { Container } from "../styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
-const CadastroProduto = () => {
+const Products = () => {
   const [openModal, handleModal] = useState(false);
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState({});
@@ -84,7 +84,7 @@ const CadastroProduto = () => {
         }}
         closeOnTriggerMouseLeave
       >
-        <FormProduto
+        <ProductForm
           product={product}
           afterSubmit={() => {
             loadProducts();
@@ -96,4 +96,4 @@ const CadastroProduto = () => {
   );
 };
 
-export default CadastroProduto;
+export default Products;
