@@ -6,6 +6,17 @@ import { Container, SmallModal as Modal } from "../styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
+const collumns = [
+  {name:'Nome', path:'name'},
+  {name:'CPF', path:'cpf'},
+  {name:'Endereço', path:'address'},
+  {name:'Número', path:'number'},
+  {name:'Bairro', path:'district'},
+  {name:'Cidade', path:'city'},
+  {name:'CEP', path:'cep'},
+  {name:'Estado', path:'state'},
+]
+
 const Customers = () => {
   const [openModal, handleModal] = useState(false);
   const [customers, setCustomers] = useState([]);
@@ -41,46 +52,22 @@ const Customers = () => {
       </div>
 
       <Table celled textAlign="center" compact>
-        <Header>
+      <Header>
           <Row>
-            <HeaderCell>Nome</HeaderCell>
-            <HeaderCell>CPF</HeaderCell>
-            <HeaderCell>Endereço</HeaderCell>
-            <HeaderCell>Número</HeaderCell>
-            <HeaderCell>Bairro</HeaderCell>
-            <HeaderCell>Cidade</HeaderCell>
-            <HeaderCell>CEP</HeaderCell>
-            <HeaderCell>Estado</HeaderCell>
+            {collumns.map(({ name }) => (
+              <HeaderCell>{name}</HeaderCell>
+            ))}
             <HeaderCell>Ações</HeaderCell>
           </Row>
         </Header>
         <Body>
-          {customers.map((product) => (
-            <Row key={product.id}>
-              <Cell>
-                <p>{product.name}</p>
-              </Cell>
-              <Cell>
-                <p>{product.cpf}</p>
-              </Cell>
-              <Cell>
-                <p>{product.address}</p>
-              </Cell>
-              <Cell>
-                <p>{product.number}</p>
-              </Cell>
-              <Cell>
-                <p>{product.district}</p>
-              </Cell>
-              <Cell>
-                <p>{product.city}</p>
-              </Cell>
-              <Cell>
-                <p>{product.cep}</p>
-              </Cell>
-              <Cell>
-                <p>{product.state}</p>
-              </Cell>
+        {customers.map((customer) => (
+            <Row key={customer.id}>
+              {collumns.map(({ path }) => (
+                <Cell>
+                  <p>{customer[path]}</p>
+                </Cell>
+              ))}
               <Cell width={5}>
                 <Button
                   onClick={() => {
@@ -90,7 +77,7 @@ const Customers = () => {
                 >
                   <Icon name="pencil" color="orange" /> Editar
                 </Button>
-                <Button onClick={() => handleDelete(product)}>
+                <Button onClick={() => handleDelete(customer)}>
                   <Icon name="close" color="red" /> Excluir
                 </Button>
               </Cell>

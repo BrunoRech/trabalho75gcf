@@ -13,9 +13,9 @@ const CustomerForm = ({ customer: selectedCustomer, afterSubmit }) => {
     try {
       const { id } = customer;
       if (id) {
-        await api.put(`/customer/${id}`, customer);
+        await api.put(`/customers/${id}`, customer);
       } else {
-        await api.post("/customer", customer);
+        await api.post("/customers", customer);
       }
       alert("Sucesso!");
       if (afterSubmit) afterSubmit();
