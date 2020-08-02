@@ -14,7 +14,11 @@ const Menu = () => {
     },
     {
       name: "Produtos",
-      to: "/produtos",
+      to: "/products",
+    },
+    {
+      name: "Clientes",
+      to: "/customers",
     },
   ];
 

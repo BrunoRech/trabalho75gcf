@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Table, Modal, Button, Icon } from "semantic-ui-react";
-import FormProduto from "../../components/forms/FormProduto";
+import ProductForm from "../../components/forms/ProductForm";
 import api from "../../components/services/api";
-import { Container } from "./styles";
+import { Container } from "../styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
-const CadastroProduto = () => {
+const collumns = [
+  { name: "Fabricante", path: "manufacturer" },
+  { name: "Descrição", path: "description" },
+];
+
+const Products = () => {
   const [openModal, handleModal] = useState(false);
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState({});
@@ -43,20 +48,20 @@ const CadastroProduto = () => {
       <Table celled textAlign="center">
         <Header>
           <Row>
-            <HeaderCell>Fabricante</HeaderCell>
-            <HeaderCell>Descrição</HeaderCell>
+            {collumns.map(({ name }) => (
+              <HeaderCell>{name}</HeaderCell>
+            ))}
             <HeaderCell>Ações</HeaderCell>
           </Row>
         </Header>
         <Body>
           {products.map((product) => (
             <Row key={product.id}>
-              <Cell>
-                <p>{product.manufacturer}</p>
-              </Cell>
-              <Cell>
-                <p>{product.description}</p>
-              </Cell>
+              {collumns.map(({ path }) => (
+                <Cell>
+                  <p>{product[path]}</p>
+                </Cell>
+              ))}
               <Cell width={5}>
                 <Button
                   onClick={() => {
@@ -84,7 +89,7 @@ const CadastroProduto = () => {
         }}
         closeOnTriggerMouseLeave
       >
-        <FormProduto
+        <ProductForm
           product={product}
           afterSubmit={() => {
             loadProducts();
@@ -96,4 +101,4 @@ const CadastroProduto = () => {
   );
 };
 
-export default CadastroProduto;
+export default Products;

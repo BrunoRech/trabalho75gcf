@@ -6,7 +6,7 @@ import api from "../services/api";
 
 const { Input, Button, TextArea } = Form;
 
-const FormProduto = ({ product, afterSubmit }) => {
+const ProductForm = ({ product, afterSubmit }) => {
   const [manufacturer, setManufacturer] = useState(product.manufacturer);
   const [description, setDescription] = useState(product.description);
 
@@ -21,14 +21,14 @@ const FormProduto = ({ product, afterSubmit }) => {
       alert("Sucesso!");
       if (afterSubmit) afterSubmit();
     } catch (error) {
-      alert("Erro ao cadastrar/alterar o product");
+      alert("Erro ao cadastrar/alterar o produto");
     }
   };
 
   return (
     <Container>
       <Form>
-        <h2>product</h2>
+        <h2>Produto</h2>
         <Input
           value={manufacturer}
           label="manufacturer"
@@ -49,14 +49,14 @@ const FormProduto = ({ product, afterSubmit }) => {
   );
 };
 
-FormProduto.propTypes = {
+ProductForm.propTypes = {
   product: objectOf(any),
   afterSubmit: func,
 };
 
-FormProduto.defaultProps = {
+ProductForm.defaultProps = {
   product: {},
   afterSubmit: null,
 };
 
-export default FormProduto;
+export default ProductForm;
