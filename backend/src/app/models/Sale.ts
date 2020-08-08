@@ -4,7 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+
+import Order from './Order';
+import Product from './Product';
 
 @Entity('sales')
 class Sale {
@@ -12,16 +17,24 @@ class Sale {
   id: string;
 
   @Column()
-  orderId: string;
+  order_id: string;
+
+  @ManyToOne(() => Order)
+  @JoinColumn({ name: 'order_id' })
+  order: Order;
 
   @Column()
-  produtId: string;
+  product_id: string;
+
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 
   @Column()
   quantity: number;
 
   @Column()
-  unitPrice: number;
+  unit_price: number;
 
   @Column()
   discount: number;
