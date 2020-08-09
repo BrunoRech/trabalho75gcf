@@ -19,26 +19,38 @@ class OrderController {
     const ordersRepository = getRepository(Order);
     const order = ordersRepository.create({
       customer_id,
+      amount: 0,
     });
+
+    await ordersRepository.save(order);
 
     const salesRepository = getRepository(Sale);
 
     let amount = 0;
 
-    productsList.forEach(async ({ id, discount, quantity, unit_price }) => {
-      const sale = salesRepository.create({
-        order_id: order.id,
-        product_id: id,
-        discount,
-        unit_price,
-      });
+    await Promise.all(
+      productsList.map(async ({ id, discount, quantity, unit_price }) => {
+        console.log({ order, id, discount, quantity, unit_price });
 
-      amount += unit_price * quantity;
+        const sale = salesRepository.create({
+          order_id: order.id,
+          product_id: id,
+          discount,
+          unit_price,
+          quantity,
+        });
 
-      return sale;
-    });
+        amount += unit_price * quantity;
+        await salesRepository.save(sale);
+        return sale;
+      }),
+    );
 
-    return response.json({ ...order, amount });
+    order.amount = amount;
+
+    await ordersRepository.save(order);
+
+    return response.json(order);
   }
 }
 
