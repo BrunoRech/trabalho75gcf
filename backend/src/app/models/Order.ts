@@ -22,6 +22,9 @@ class Order {
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
+  @Column()
+  amount: number;
+
   @CreateDateColumn()
   created_at: Date;
 

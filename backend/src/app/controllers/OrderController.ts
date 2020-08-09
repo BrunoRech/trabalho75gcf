@@ -7,34 +7,33 @@ interface ProductRequest {
   id: string;
   discount: number;
   quantity: number;
-  unitPrice: number;
+  unit_price: number;
 }
 
 class OrderController {
   async create(request: Request, response: Response): Promise<Response> {
-    const { clientId, products } = request.body;
+    const { customer_id, products } = request.body;
 
     const productsList: Array<ProductRequest> = products;
 
     const ordersRepository = getRepository(Order);
     const order = ordersRepository.create({
-      clientId,
+      customer_id,
     });
 
     const salesRepository = getRepository(Sale);
 
     let amount = 0;
 
-    productsList.forEach(async ({ id, discount, quantity, unitPrice }) => {
+    productsList.forEach(async ({ id, discount, quantity, unit_price }) => {
       const sale = salesRepository.create({
-        orderId: order.id,
-        produtId: id,
+        order_id: order.id,
+        product_id: id,
         discount,
-        quantity,
-        unitPrice,
+        unit_price,
       });
 
-      amount += unitPrice * quantity;
+      amount += unit_price * quantity;
 
       return sale;
     });
