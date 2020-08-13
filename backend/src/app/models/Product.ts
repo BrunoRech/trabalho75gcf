@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import Sale from './Sale';
 
 @Entity('products')
 class Product {
@@ -16,6 +18,9 @@ class Product {
 
   @Column()
   description: string;
+
+  @OneToMany(() => Sale, sale => sale.order)
+  sales: Sale[];
 
   @CreateDateColumn()
   created_at: Date;

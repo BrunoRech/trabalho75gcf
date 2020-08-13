@@ -18,7 +18,7 @@ export default class CreateOrders1596926232379 implements MigrationInterface {
             type: 'uuid',
           },
           {
-            name: 'amount',
+            name: 'total',
             type: 'float',
           },
           {

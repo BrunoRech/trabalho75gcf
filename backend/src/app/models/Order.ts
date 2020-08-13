@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 
 import Customer from './Customer';
+import Sale from './Sale';
 
 @Entity('orders')
 class Order {
@@ -18,12 +20,15 @@ class Order {
   @Column()
   customer_id: string;
 
-  @ManyToOne(() => Customer)
+  @ManyToOne(() => Customer, customer => customer.orders)
   @JoinColumn({ name: 'customer_id' })
   customer: Customer;
 
+  @OneToMany(() => Sale, sale => sale.order)
+  sales: Sale[];
+
   @Column()
-  amount: number;
+  total: number;
 
   @CreateDateColumn()
   created_at: Date;
