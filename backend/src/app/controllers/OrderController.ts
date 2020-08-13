@@ -97,18 +97,21 @@ class OrderController {
     await Promise.all(
       productsList.map(
         async ({ id: productId, discount, quantity, unit_price }) => {
-          const sale = salesRepository.create({
-            order_id: id,
-            product_id: productId,
-            discount,
-            unit_price,
-            quantity,
+          let sale = await salesRepository.findOne({
+            where: { product_id: productId },
           });
-
-          sales.push(sale);
-
+          if (!sale) {
+            sale = salesRepository.create({
+              order_id: id,
+              product_id: productId,
+              discount,
+              unit_price,
+              quantity,
+            });
+            await salesRepository.save(sale);
+          }
           total += unit_price * quantity;
-          await salesRepository.save(sale);
+          sales.push(sale);
           return sale;
         },
       ),
@@ -118,7 +121,7 @@ class OrderController {
     order.customer_id = customer_id;
     order.sales = sales;
 
-    await ordersRepository.save(order);
+    await ordersRepository.save({ id, order });
 
     return response.json(order);
   }

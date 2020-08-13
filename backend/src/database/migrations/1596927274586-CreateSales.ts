@@ -50,7 +50,7 @@ export default class CreateSales1596927274586 implements MigrationInterface {
             columnNames: ['order_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'orders',
-            onDelete: 'SET NULL',
+            onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           },
           {
