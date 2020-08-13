@@ -16,10 +16,12 @@ export default class CreateSales1596927274586 implements MigrationInterface {
           {
             name: 'order_id',
             type: 'uuid',
+            isNullable: true,
           },
           {
             name: 'product_id',
             type: 'uuid',
+            isNullable: true,
           },
           {
             name: 'quantity',
@@ -50,7 +52,7 @@ export default class CreateSales1596927274586 implements MigrationInterface {
             columnNames: ['order_id'],
             referencedColumnNames: ['id'],
             referencedTableName: 'orders',
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
             onUpdate: 'CASCADE',
           },
           {
