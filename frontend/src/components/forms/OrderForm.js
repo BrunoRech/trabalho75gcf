@@ -13,15 +13,12 @@ const columns = [
   { name: "Desconto", path: "discount" },
 ];
 
-const OrderForm = ({ afterSubmit, order: selectedOrder }) => {
-  const [customers, setCustomers] = useState(null);
-  const [products, setProducts] = useState([null]);
+const OrderForm = ({ afterSubmit, order, setOrder }) => {
+  const [customers, setCustomers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [orderProduct, setOrderProduct] = useState(null);
   const [selectedProduct, selectProduct] = useState(null);
-  const [order, setOrder] = useState(
-    selectedOrder || { customer_id: null, products: [] }
-  );
-    console.log(order)
+
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -54,11 +51,10 @@ const OrderForm = ({ afterSubmit, order: selectedOrder }) => {
   }, []);
 
   const addProduct = () => {
-    const { customer_id, products } = order;
     const { id, description } = selectedProduct;
     setOrder({
-      customer_id,
-      products: [...products, { ...orderProduct, id, description }],
+      ...order,
+      products: [...order.products, { ...orderProduct, id, description }],
     });
     selectProduct(null);
     setOrderProduct(null);

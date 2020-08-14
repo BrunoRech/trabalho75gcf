@@ -8,35 +8,49 @@ const { Button } = Form;
 const { Body, Cell, Header, HeaderCell, Row } = Table;
 
 const columns = [
-  { name: "Cliente", render: ({ customer }) => customer.name },
+  { name: "Cliente", render: ({ customer }) => customer },
   { name: "Venda", render: () => "aa" },
 ];
 const productColumns = [];
 
-/* 
-venda :{ 
-    total,
-    sales: {
-        quantity,
-        unit_price,
-        product : {
-            manufacturer,
-            description
-        }
-    }
-}
-*/
-
 const Orders = ({}) => {
   const [openModal, handleModal] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [selectedOrder, selectOrder] = useState({});
+  const [selectedOrder, selectOrder] = useState({
+    customer_id: null,
+    products: [],
+  });
 
   const loadOrders = useCallback(async () => {
     try {
       const { data } = await api.get("/orders");
-      setOrders(data);
+      console.log(data);
+      setOrders(
+        data.map(({ id, customer, sales, total }) => {
+          const products = sales.map(
+            ({ discount, unit_price, product, quantity }) => {
+              const { description, manufacturer, id } = product || {};
+              return {
+                id,
+                discount: Number(discount),
+                unit_price: Number(unit_price),
+                quantity: Number(quantity),
+                description,
+                manufacturer,
+              };
+            }
+          );
+          return {
+            id,
+            customer_id: customer.id,
+            customer: customer.name,
+            products,
+            total,
+          };
+        })
+      );
     } catch (error) {
+      console.log(error);
       alert("Erro ao buscar pedidos!");
     }
   }, []);
@@ -99,6 +113,7 @@ const Orders = ({}) => {
           closeOnTriggerMouseLeave
         >
           <OrderForm
+            setOrder={selectOrder}
             order={selectedOrder}
             afterSubmit={() => {
               loadOrders();
