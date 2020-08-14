@@ -31,7 +31,7 @@ const ProductForm = ({ product, afterSubmit }) => {
         <h2>Produto</h2>
         <Input
           value={manufacturer}
-          label="manufacturer"
+          label="Fabricante"
           type="text"
           onChange={({ target }) => setManufacturer(target.value)}
         />

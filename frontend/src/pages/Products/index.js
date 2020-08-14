@@ -6,7 +6,7 @@ import { Container } from "../styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
-const collumns = [
+const columns = [
   { name: "Fabricante", path: "manufacturer" },
   { name: "Descrição", path: "description" },
 ];
@@ -48,7 +48,7 @@ const Products = () => {
       <Table celled textAlign="center">
         <Header>
           <Row>
-            {collumns.map(({ name }) => (
+            {columns.map(({ name }) => (
               <HeaderCell>{name}</HeaderCell>
             ))}
             <HeaderCell>Ações</HeaderCell>
@@ -57,7 +57,7 @@ const Products = () => {
         <Body>
           {products.map((product) => (
             <Row key={product.id}>
-              {collumns.map(({ path }) => (
+              {columns.map(({ path }) => (
                 <Cell>
                   <p>{product[path]}</p>
                 </Cell>
