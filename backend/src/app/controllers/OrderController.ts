@@ -61,7 +61,7 @@ class OrderController {
 
         sales.push(sale);
 
-        total += unit_price * quantity;
+        total += (unit_price - discount) * quantity;
         await salesRepository.save(sale);
         return sale;
       }),
@@ -110,7 +110,7 @@ class OrderController {
             });
             await salesRepository.save(sale);
           }
-          total += unit_price * quantity;
+          total += (unit_price - discount) * quantity;
           sales.push(sale);
           return sale;
         },
