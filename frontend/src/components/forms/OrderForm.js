@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
-import { Form, Table } from "semantic-ui-react";
+import { Form, Table, Icon } from "semantic-ui-react";
 import { Container } from "./styles";
 
 const { Input, Button, Select, Group } = Form;
@@ -132,6 +132,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
               {columns?.map(({ name }) => (
                 <HeaderCell>{name}</HeaderCell>
               ))}
+              <HeaderCell>Excluir</HeaderCell>
             </Row>
           </Header>
           <Body>
@@ -142,6 +143,20 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
                     <p>{product[path]}</p>
                   </Cell>
                 ))}
+                <Cell>
+                  <Button
+                    onClick={() => {
+                      setOrder({
+                        ...order,
+                        products: order.products.filter(
+                          ({ id }) => product.id !== id
+                        ),
+                      });
+                    }}
+                  >
+                    <Icon name="close" color="red" />
+                  </Button>
+                </Cell>
               </Row>
             ))}
           </Body>
