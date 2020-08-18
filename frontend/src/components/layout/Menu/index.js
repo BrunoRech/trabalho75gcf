@@ -20,6 +20,10 @@ const Menu = () => {
       name: "Clientes",
       to: "/customers",
     },
+    {
+      name: "Pedidos",
+      to: "/orders",
+    },
   ];
 
   return (

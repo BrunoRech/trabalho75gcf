@@ -1,11 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateCustomers1596308542787
-  implements MigrationInterface {
+export default class CreateOrders1596926232379 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'customers',
+        name: 'orders',
         columns: [
           {
             name: 'id',
@@ -15,36 +14,12 @@ export default class CreateCustomers1596308542787
             default: 'uuid_generate_v4()',
           },
           {
-            name: 'name',
-            type: 'varchar',
+            name: 'customer_id',
+            type: 'uuid',
           },
           {
-            name: 'cpf',
-            type: 'text',
-          },
-          {
-            name: 'address',
-            type: 'text',
-          },
-          {
-            name: 'number',
-            type: 'text',
-          },
-          {
-            name: 'district',
-            type: 'text',
-          },
-          {
-            name: 'city',
-            type: 'text',
-          },
-          {
-            name: 'cep',
-            type: 'text',
-          },
-          {
-            name: 'state',
-            type: 'text',
+            name: 'total',
+            type: 'float',
           },
           {
             name: 'created_at',
@@ -57,11 +32,21 @@ export default class CreateCustomers1596308542787
             default: 'now()',
           },
         ],
+        foreignKeys: [
+          {
+            name: 'OrderCustomer',
+            columnNames: ['customer_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'customers',
+            onDelete: 'SET NULL',
+            onUpdate: 'CASCADE',
+          },
+        ],
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('customers');
+    await queryRunner.dropTable('orders');
   }
 }

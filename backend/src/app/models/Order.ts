@@ -4,23 +4,31 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
+
+import Customer from './Customer';
 import Sale from './Sale';
 
-@Entity('products')
-class Product {
+@Entity('orders')
+class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  manufacturer: string;
+  customer_id: string;
 
-  @Column()
-  description: string;
+  @ManyToOne(() => Customer, customer => customer.orders)
+  @JoinColumn({ name: 'customer_id' })
+  customer: Customer;
 
   @OneToMany(() => Sale, sale => sale.order)
   sales: Sale[];
+
+  @Column()
+  total: number;
 
   @CreateDateColumn()
   created_at: Date;
@@ -29,4 +37,4 @@ class Product {
   updated_at: Date;
 }
 
-export default Product;
+export default Order;

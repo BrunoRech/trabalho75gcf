@@ -6,7 +6,7 @@ import { Container, SmallModal as Modal } from "../styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
-const collumns = [
+const columns = [
   {name:'Nome', path:'name'},
   {name:'CPF', path:'cpf'},
   {name:'Endereço', path:'address'},
@@ -54,7 +54,7 @@ const Customers = () => {
       <Table celled textAlign="center" compact>
       <Header>
           <Row>
-            {collumns.map(({ name }) => (
+            {columns.map(({ name }) => (
               <HeaderCell>{name}</HeaderCell>
             ))}
             <HeaderCell>Ações</HeaderCell>
@@ -63,7 +63,7 @@ const Customers = () => {
         <Body>
         {customers.map((customer) => (
             <Row key={customer.id}>
-              {collumns.map(({ path }) => (
+              {columns.map(({ path }) => (
                 <Cell>
                   <p>{customer[path]}</p>
                 </Cell>
