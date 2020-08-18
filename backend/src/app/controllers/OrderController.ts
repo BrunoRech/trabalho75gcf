@@ -127,7 +127,7 @@ class OrderController {
     order.customer_id = customer_id;
     order.sales = sales;
 
-    await ordersRepository.save({ id, order });
+    await ordersRepository.save(order);
 
     return response.json(order);
   }
