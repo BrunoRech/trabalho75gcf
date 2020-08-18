@@ -108,8 +108,14 @@ class OrderController {
               unit_price,
               quantity,
             });
-            await salesRepository.save(sale);
+          } else {
+            sale.order_id = id;
+            sale.product_id = productId;
+            sale.discount = discount;
+            sale.quantity = quantity;
+            sale.unit_price = unit_price;
           }
+          await salesRepository.save(sale);
           total += (unit_price - discount) * quantity;
           sales.push(sale);
           return sale;
