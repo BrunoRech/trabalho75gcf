@@ -62,7 +62,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
 
   const handleSubmit = async () => {
     try {
-      const { id } = order;
+      const { id } = order || {};
       if (id) {
         await api.put(`/orders/${id}`, order);
       } else {
@@ -94,6 +94,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
         />
         <Group>
           <Input
+            type="number"
             label="Preço unitário"
             value={orderProduct?.unit_price || ""}
             onChange={({ target }) =>
@@ -162,7 +163,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
           </Body>
         </Table>
         <Button primary fluid onClick={handleSubmit}>
-          Cadastrar
+          Salvar
         </Button>
       </Form>
     </Container>
