@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import Order from '../models/Order';
 import Sale from '../models/Sale';
+import Customer from '../models/Customer';
+import Product from '../models/Product';
 
 interface ProductRequest {
   id: string;
@@ -42,6 +44,13 @@ class OrderController {
       total: 0,
     });
 
+    const customersRepository = getRepository(Customer);
+    const customer = await customersRepository.findOne(customer_id);
+
+    if (!customer) {
+      return response.status(400).json({ error: 'Cliente não encontrado' });
+    }
+
     await ordersRepository.save(order);
 
     const salesRepository = getRepository(Sale);
@@ -50,18 +59,22 @@ class OrderController {
     const sales: Sale[] = [];
 
     await Promise.all(
-      productsList.map(async ({ id, discount, quantity, unit_price }) => {
+      productsList.map(async ({ id, discount, quantity }) => {
+        const productsRepository = getRepository(Product);
+        const product = await productsRepository.findOne(id);
+
+        if (!product) return null;
+
         const sale = salesRepository.create({
           order_id: order.id,
           product_id: id,
           discount,
-          unit_price,
           quantity,
         });
 
         sales.push(sale);
 
-        total += (unit_price - discount) * quantity;
+        total += (product.price - discount) * quantity - customer.discount;
         await salesRepository.save(sale);
         return sale;
       }),
@@ -105,7 +118,6 @@ class OrderController {
               order_id: id,
               product_id: productId,
               discount,
-              unit_price,
               quantity,
             });
           } else {
@@ -113,7 +125,6 @@ class OrderController {
             sale.product_id = productId;
             sale.discount = discount;
             sale.quantity = quantity;
-            sale.unit_price = unit_price;
           }
           await salesRepository.save(sale);
           total += (unit_price - discount) * quantity;
