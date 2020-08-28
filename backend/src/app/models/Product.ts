@@ -19,6 +19,9 @@ class Product {
   @Column()
   description: string;
 
+  @Column()
+  price: number;
+
   @OneToMany(() => Sale, sale => sale.order)
   sales: Sale[];
 

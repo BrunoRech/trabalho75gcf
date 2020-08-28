@@ -29,6 +29,7 @@ class CustomersController {
       city,
       cep,
       state,
+      discount,
     } = request.body;
 
     const customersRepository = getRepository(Customer);
@@ -41,6 +42,7 @@ class CustomersController {
       city,
       cep,
       state,
+      discount,
     });
 
     await customersRepository.save(customer);
@@ -59,6 +61,7 @@ class CustomersController {
       city,
       cep,
       state,
+      discount,
     } = request.body;
 
     const customersRepository = getRepository(Customer);
@@ -72,6 +75,7 @@ class CustomersController {
       city,
       cep,
       state,
+      discount,
     });
 
     return response.json(customer);
