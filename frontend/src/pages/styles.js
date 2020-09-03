@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Modal as modal } from "semantic-ui-react";
+import { Modal as modal, Button as SemButton } from "semantic-ui-react";
 
 export const Container = styled.div`
   padding: 20px;
@@ -12,5 +12,9 @@ export const SmallModal = styled(modal)`
 
 export const Modal = styled(modal)`
   width: 500px !important;
+`;
+
+export const TableButton = styled(SemButton)`
+  background: transparent !important;
 `;
 

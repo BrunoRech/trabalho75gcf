@@ -3,6 +3,7 @@ import { Form, Table, Icon, Button } from "semantic-ui-react";
 import OrderForm from "../../components/forms/OrderForm";
 import { Modal, Container } from "../styles";
 import api from "../../components/services/api";
+import { TableButton } from "../../components/forms/styles";
 
 const { Body, Cell, Header, HeaderCell, Row } = Table;
 
@@ -22,15 +23,16 @@ const Orders = ({}) => {
   const loadOrders = useCallback(async () => {
     try {
       const { data } = await api.get("/orders");
+      console.log(data)
       setOrders(
         data.map(({ id, customer, sales, total }) => {
           const products = sales.map(
-            ({ discount, unit_price, product, quantity }) => {
+            ({ discount, price, product, quantity }) => {
               const { description, manufacturer, id } = product || {};
               return {
                 id,
                 discount: Number(discount),
-                unit_price: Number(unit_price),
+                price: Number(product?.price),
                 quantity: Number(quantity),
                 description,
                 manufacturer,
@@ -72,7 +74,6 @@ const Orders = ({}) => {
         <div>
           <Button onClick={() => handleModal(true)}>Cadastrar</Button>
         </div>
-
         <Table celled textAlign="center">
           <Header>
             <Row>
@@ -91,17 +92,17 @@ const Orders = ({}) => {
                   </Cell>
                 ))}
                 <Cell width={5}>
-                  <Button
+                  <TableButton
                     onClick={() => {
                       selectOrder(order);
                       handleModal(true);
                     }}
                   >
                     <Icon name="pencil" color="orange" /> Editar
-                  </Button>
-                  <Button onClick={() => handleDelete(order)}>
+                  </TableButton>
+                  <TableButton onClick={() => handleDelete(order)}>
                     <Icon name="close" color="red" /> Excluir
-                  </Button>
+                  </TableButton>
                 </Cell>
               </Row>
             ))}

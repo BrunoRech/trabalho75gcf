@@ -3,6 +3,7 @@ import { Table, Button, Icon } from "semantic-ui-react";
 import CustomerForm from "../../components/forms/CustomerForm";
 import api from "../../components/services/api";
 import { Container, SmallModal as Modal } from "../styles";
+import { TableButton } from "../../components/forms/styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
@@ -15,6 +16,7 @@ const columns = [
   {name:'Cidade', path:'city'},
   {name:'CEP', path:'cep'},
   {name:'Estado', path:'state'},
+  {name:'Desconto', path:'discount'},
 ]
 
 const Customers = () => {
@@ -69,17 +71,17 @@ const Customers = () => {
                 </Cell>
               ))}
               <Cell width={5}>
-                <Button
+                <TableButton
                   onClick={() => {
                     setCustomer(customer);
                     handleModal(true);
                   }}
                 >
                   <Icon name="pencil" color="orange" /> Editar
-                </Button>
-                <Button onClick={() => handleDelete(customer)}>
+                </TableButton>
+                <TableButton onClick={() => handleDelete(customer)}>
                   <Icon name="close" color="red" /> Excluir
-                </Button>
+                </TableButton>
               </Cell>
             </Row>
           ))}

@@ -9,14 +9,16 @@ const { Input, Button, TextArea } = Form;
 const ProductForm = ({ product, afterSubmit }) => {
   const [manufacturer, setManufacturer] = useState(product.manufacturer);
   const [description, setDescription] = useState(product.description);
+  const [price, setPrice] = useState(product.price);
 
   const handleSubmit = async () => {
     try {
+      const productSubmit = {manufacturer, description, price}
       const { id } = product;
       if (id) {
-        await api.put(`/products/${id}`, { manufacturer, description });
+        await api.put(`/products/${id}`, productSubmit);
       } else {
-        await api.post("/products", { manufacturer, description });
+        await api.post("/products", productSubmit);
       }
       alert("Sucesso!");
       if (afterSubmit) afterSubmit();
@@ -35,6 +37,12 @@ const ProductForm = ({ product, afterSubmit }) => {
           type="text"
           onChange={({ target }) => setManufacturer(target.value)}
         />
+        <Input
+          value={price}
+          label="Preço"
+          type="number"
+          onChange={({ target }) => setPrice(target.value)}
+        />
         <TextArea
           value={description}
           label="Descrição"
@@ -42,7 +50,7 @@ const ProductForm = ({ product, afterSubmit }) => {
           onChange={({ target }) => setDescription(target.value)}
         />
         <Button onClick={handleSubmit} primary fluid>
-          Cadastrar
+          Salvar
         </Button>
       </Form>
     </Container>
