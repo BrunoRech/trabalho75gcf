@@ -28,13 +28,21 @@ const CustomerForm = ({ customer: selectedCustomer, afterSubmit }) => {
     <Container>
       <Form>
         <h2>Cliente</h2>
+        <Input
+          value={customer.name}
+          label="Nome"
+          type="text"
+          onChange={({ target }) =>
+            setCustomer({ ...customer, name: target.value })
+          }
+        />
         <Group>
           <Input
-            value={customer.name}
-            label="Nome"
-            type="text"
+            value={customer.discount}
+            label="Desconto"
+            type="number"
             onChange={({ target }) =>
-              setCustomer({ ...customer, name: target.value })
+              setCustomer({ ...customer, discount: target.value })
             }
           />
           <Input
@@ -102,7 +110,7 @@ const CustomerForm = ({ customer: selectedCustomer, afterSubmit }) => {
         </Group>
 
         <Button onClick={handleSubmit} primary fluid>
-          Cadastrar
+          Salvar
         </Button>
       </Form>
     </Container>

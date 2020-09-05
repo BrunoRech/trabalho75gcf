@@ -34,9 +34,6 @@ class Sale {
   quantity: number;
 
   @Column()
-  unit_price: number;
-
-  @Column()
   discount: number;
 
   @CreateDateColumn()

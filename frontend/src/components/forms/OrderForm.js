@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import { Form, Table, Icon } from "semantic-ui-react";
-import { Container } from "./styles";
+import { Container, TableButton } from "./styles";
 
 const { Input, Button, Select, Group } = Form;
 const { Body, Cell, Header, HeaderCell, Row } = Table;
 
 const columns = [
   { name: "Produto", path: "description" },
-  { name: "Preço Unitário", path: "unit_price" },
+  { name: "Preço Unitário", path: "price" },
   { name: "Quantidade", path: "quantity" },
   { name: "Desconto", path: "discount" },
 ];
 
 const OrderForm = ({ afterSubmit, order, setOrder }) => {
   const [customers, setCustomers] = useState([]);
+  const [customersList, setCustomersList] = useState([]);
   const [products, setProducts] = useState([]);
   const [orderProduct, setOrderProduct] = useState(null);
   const [selectedProduct, selectProduct] = useState(null);
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
         const { data } = await api.get("/customers");
+        setCustomersList(data);
         setCustomers(
           data.map(({ id, name }) => {
             return { key: id, value: id, text: name };
@@ -51,13 +54,21 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
   }, []);
 
   const addProduct = () => {
-    const { id, description } = selectedProduct;
+    const { id, description, price } = selectedProduct;
+
+    if (order?.products.find(({ id: productId }) => productId === id)) {
+      return alert("Esse produto já está na lista!");
+    }
+
     setOrder({
       ...order,
-      products: [...order.products, { ...orderProduct, id, description }],
+      products: [
+        ...order.products,
+        { ...orderProduct, id, description, discount, price },
+      ],
     });
     selectProduct(null);
-    setOrderProduct(null);
+    return setOrderProduct(null);
   };
 
   const handleSubmit = async () => {
@@ -84,21 +95,24 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
           value={order.customer_id}
           onChange={(event, { value }) => {
             setOrder({ ...order, customer_id: value });
+            setDiscount(customersList.find(({ id }) => id === value)?.discount);
           }}
         />
         <Select
           options={products}
           label="Produto"
           value={selectedProduct}
-          onChange={(event, { value }) => selectProduct(value)}
+          onChange={(event, { value }) => {
+            selectProduct(value);
+          }}
         />
         <Group>
           <Input
             type="number"
             label="Preço unitário"
-            value={orderProduct?.unit_price || ""}
+            value={selectedProduct?.price || ""}
             onChange={({ target }) =>
-              setOrderProduct({ ...orderProduct, unit_price: target.value })
+              setOrderProduct({ ...orderProduct, price: target.value })
             }
           />
           <Input
@@ -114,7 +128,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
           <Input
             type="number"
             label="Desconto"
-            value={orderProduct?.discount || ""}
+            value={discount}
             onChange={({ target }) =>
               setOrderProduct({ ...orderProduct, discount: target.value })
             }
@@ -145,7 +159,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
                   </Cell>
                 ))}
                 <Cell>
-                  <Button
+                  <TableButton
                     onClick={() => {
                       setOrder({
                         ...order,
@@ -156,7 +170,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
                     }}
                   >
                     <Icon name="close" color="red" />
-                  </Button>
+                  </TableButton>
                 </Cell>
               </Row>
             ))}

@@ -37,6 +37,9 @@ class Customer {
   @Column()
   state: string;
 
+  @Column()
+  discount: number;
+
   @OneToMany(() => Order, order => order.customer)
   orders: Order[];
 

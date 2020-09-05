@@ -20,12 +20,13 @@ class ProductsController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { manufacturer, description } = request.body;
+    const { manufacturer, description, price } = request.body;
 
     const productsRepository = getRepository(Product);
     const product = productsRepository.create({
       manufacturer,
       description,
+      price,
     });
 
     await productsRepository.save(product);
@@ -35,13 +36,14 @@ class ProductsController {
 
   public async update(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-    const { manufacturer, description } = request.body;
+    const { manufacturer, description, price } = request.body;
 
     const productsRepository = getRepository(Product);
     const product = await productsRepository.save({
       id,
       manufacturer,
       description,
+      price,
     });
 
     return response.json(product);

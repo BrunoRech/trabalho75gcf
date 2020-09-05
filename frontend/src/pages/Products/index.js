@@ -3,12 +3,14 @@ import { Table, Modal, Button, Icon } from "semantic-ui-react";
 import ProductForm from "../../components/forms/ProductForm";
 import api from "../../components/services/api";
 import { Container } from "../styles";
+import { TableButton } from "../../components/forms/styles";
 
 const { Body, Row, Cell, HeaderCell, Header } = Table;
 
 const columns = [
   { name: "Fabricante", path: "manufacturer" },
   { name: "Descrição", path: "description" },
+  { name: "Preço", path: "price" },
 ];
 
 const Products = () => {
@@ -63,17 +65,17 @@ const Products = () => {
                 </Cell>
               ))}
               <Cell width={5}>
-                <Button
+                <TableButton
                   onClick={() => {
                     setProduct(product);
                     handleModal(true);
                   }}
                 >
                   <Icon name="pencil" color="orange" /> Editar
-                </Button>
-                <Button onClick={() => handleDelete(product)}>
+                </TableButton>
+                <TableButton onClick={() => handleDelete(product)}>
                   <Icon name="close" color="red" /> Excluir
-                </Button>
+                </TableButton>
               </Cell>
             </Row>
           ))}
