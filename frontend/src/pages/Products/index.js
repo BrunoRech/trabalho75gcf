@@ -1,17 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Table, Modal, Button, Icon } from "semantic-ui-react";
-import ProductForm from "../../components/forms/ProductForm";
-import api from "../../components/services/api";
-import { Container } from "../styles";
-import { TableButton } from "../../components/forms/styles";
-
-const { Body, Row, Cell, HeaderCell, Header } = Table;
-
-const columns = [
-  { name: "Fabricante", path: "manufacturer" },
-  { name: "Descrição", path: "description" },
-  { name: "Preço", path: "price" },
-];
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal, Button, Icon } from 'semantic-ui-react';
+import ProductForm from '../../components/forms/ProductForm';
+import { PRODUCTS } from '../../components/layout/Table/headerNames';
+import Table from '../../components/layout/Table';
+import api from '../../components/services/api';
+import { Container } from '../styles';
 
 const Products = () => {
   const [openModal, handleModal] = useState(false);
@@ -20,10 +13,10 @@ const Products = () => {
 
   const loadProducts = useCallback(async () => {
     try {
-      const { data } = await api.get("/products");
+      const { data } = await api.get('/products');
       setProducts(data);
     } catch (error) {
-      alert("Ocorreu um erro ao buscar por produtos");
+      alert('Ocorreu um erro ao buscar por produtos');
     }
   }, []);
 
@@ -34,11 +27,16 @@ const Products = () => {
   const handleDelete = async ({ id }) => {
     try {
       await api.delete(`/products/${id}`);
-      setProducts(products.filter((prod) => prod.id !== id));
-      alert("Sucesso!");
+      setProducts(products.filter(prod => prod.id !== id));
+      alert('Sucesso!');
     } catch (error) {
-      alert("Ocorreu um erro ao deletar produto");
+      alert('Ocorreu um erro ao deletar produto');
     }
+  };
+
+  const handleEdit = product => {
+    setProduct(product);
+    handleModal(true);
   };
 
   return (
@@ -47,40 +45,22 @@ const Products = () => {
         <Button onClick={() => handleModal(true)}>Cadastrar</Button>
       </div>
 
-      <Table celled textAlign="center">
-        <Header>
-          <Row>
-            {columns.map(({ name }) => (
-              <HeaderCell>{name}</HeaderCell>
-            ))}
-            <HeaderCell>Ações</HeaderCell>
-          </Row>
-        </Header>
-        <Body>
-          {products.map((product) => (
-            <Row key={product.id}>
-              {columns.map(({ path }) => (
-                <Cell>
-                  <p>{product[path]}</p>
-                </Cell>
-              ))}
-              <Cell width={5}>
-                <TableButton
-                  onClick={() => {
-                    setProduct(product);
-                    handleModal(true);
-                  }}
-                >
-                  <Icon name="pencil" color="orange" /> Editar
-                </TableButton>
-                <TableButton onClick={() => handleDelete(product)}>
-                  <Icon name="close" color="red" /> Excluir
-                </TableButton>
-              </Cell>
-            </Row>
-          ))}
-        </Body>
-      </Table>
+      <Table
+        data={products}
+        header={PRODUCTS}
+        actions={[
+          {
+            label: 'Editar',
+            icon: <Icon name="pencil" color="orange" />,
+            onClick: handleEdit,
+          },
+          {
+            label: 'Excluir',
+            icon: <Icon name="close" color="red" />,
+            onClick: handleDelete,
+          },
+        ]}
+      />
 
       <Modal
         open={openModal}

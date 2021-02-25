@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { objectOf, any, func } from "prop-types";
-import { Form } from "semantic-ui-react";
-import { Container } from "./styles";
-import api from "../services/api";
+import React, { useState } from 'react';
+import { Form } from 'semantic-ui-react';
+import { Container } from './styles';
+import api from '../services/api';
 
 const { Input, Button, TextArea } = Form;
 
@@ -13,17 +12,17 @@ const ProductForm = ({ product, afterSubmit }) => {
 
   const handleSubmit = async () => {
     try {
-      const productSubmit = {manufacturer, description, price}
+      const productSubmit = { manufacturer, description, price };
       const { id } = product;
       if (id) {
         await api.put(`/products/${id}`, productSubmit);
       } else {
-        await api.post("/products", productSubmit);
+        await api.post('/products', productSubmit);
       }
-      alert("Sucesso!");
+      alert('Sucesso!');
       if (afterSubmit) afterSubmit();
     } catch (error) {
-      alert("Erro ao cadastrar/alterar o produto");
+      alert('Erro ao cadastrar/alterar o produto');
     }
   };
 
@@ -55,16 +54,6 @@ const ProductForm = ({ product, afterSubmit }) => {
       </Form>
     </Container>
   );
-};
-
-ProductForm.propTypes = {
-  product: objectOf(any),
-  afterSubmit: func,
-};
-
-ProductForm.defaultProps = {
-  product: {},
-  afterSubmit: null,
 };
 
 export default ProductForm;

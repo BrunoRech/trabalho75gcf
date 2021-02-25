@@ -1,33 +1,29 @@
 {
-    "env": {
+  "env": {
       "browser": true,
-      "es6": true
-    },
-    "extends": [
-      "airbnb",
+      "es2020": true
+  },
+  "extends": [
       "plugin:react/recommended",
+      "airbnb",
       "plugin:prettier/recommended"
-    ],
-    "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
+  ],
+  "parserOptions": {
       "ecmaFeatures": {
-        "jsx": true
+          "jsx": true
       },
       "ecmaVersion": 2020,
       "sourceType": "module"
-    },
-    "plugins": [
+  },
+  "plugins": [
       "react",
       "react-hooks",
       "prettier"
-    ],
-    "rules": {
+  ],
+  "rules": {
       "import/no-named-as-default": "off",
       "import/no-named-as-default-member": "off",
-      "prettier/prettier": "off",
+      "prettier/prettier": "error",
       "react/jsx-filename-extension": [
         "error",
         {
@@ -50,11 +46,23 @@
       "no-param-reassign": "off",
       "no-underscore-dangle": "off",
       "camelcase": "off",
+      "prefer-destructuring": "off",
+      "no-eval": "off",
+      "no-await-in-loop":"off",
+      "no-case-declarations":"off",
+      "no-shadow":"off",
+      "import/no-cycle": "off",
+      "no-plusplus": "off",
+      "no-alert":"off",
+      "react/prop-types":"off",
+      "jsx-a11y/anchor-is-valid": "off",
+      "react/jsx-wrap-multilines": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "react/jsx-props-no-spreading": "off",
       "react/jsx-curly-newline": "off",
       "react/display-name": "off",
-      "react/no-array-index-key": "off"
-    }
+      "react/no-array-index-key": "off",
+      "react/forbid-prop-types": "off"
   }
+}

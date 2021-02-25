@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { objectOf, any, func } from "prop-types";
-import { Form } from "semantic-ui-react";
-import { Container } from "./styles";
-import api from "../services/api";
+import React, { useState } from 'react';
+import { Form } from 'semantic-ui-react';
+import { Container } from './styles';
+import api from '../services/api';
 
 const { Input, Button, Group } = Form;
 
@@ -15,12 +14,12 @@ const CustomerForm = ({ customer: selectedCustomer, afterSubmit }) => {
       if (id) {
         await api.put(`/customers/${id}`, customer);
       } else {
-        await api.post("/customers", customer);
+        await api.post('/customers', customer);
       }
-      alert("Sucesso!");
+      alert('Sucesso!');
       if (afterSubmit) afterSubmit();
     } catch (error) {
-      alert("Erro ao cadastrar/alterar o cliente");
+      alert('Erro ao cadastrar/alterar o cliente');
     }
   };
 
@@ -115,16 +114,6 @@ const CustomerForm = ({ customer: selectedCustomer, afterSubmit }) => {
       </Form>
     </Container>
   );
-};
-
-CustomerForm.propTypes = {
-  customer: objectOf(any),
-  afterSubmit: func,
-};
-
-CustomerForm.defaultProps = {
-  customer: {},
-  afterSubmit: null,
 };
 
 export default CustomerForm;

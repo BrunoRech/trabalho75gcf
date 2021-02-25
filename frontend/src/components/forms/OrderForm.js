@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
-import api from "../services/api";
-import { Form, Table, Icon } from "semantic-ui-react";
-import { Container, TableButton } from "./styles";
+import React, { useState, useEffect } from 'react';
+import { Form, Icon } from 'semantic-ui-react';
+import { ORDER_PRODUCTS } from '../layout/Table/headerNames';
+import { Container } from './styles';
+import api from '../services/api';
+import Table from '../layout/Table';
 
 const { Input, Button, Select, Group } = Form;
-const { Body, Cell, Header, HeaderCell, Row } = Table;
-
-const columns = [
-  { name: "Produto", path: "description" },
-  { name: "Preço Unitário", path: "price" },
-  { name: "Quantidade", path: "quantity" },
-  { name: "Desconto", path: "discount" },
-];
 
 const OrderForm = ({ afterSubmit, order, setOrder }) => {
   const [customers, setCustomers] = useState([]);
@@ -24,29 +18,29 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const { data } = await api.get("/customers");
+        const { data } = await api.get('/customers');
         setCustomersList(data);
         setCustomers(
           data.map(({ id, name }) => {
             return { key: id, value: id, text: name };
-          })
+          }),
         );
       } catch (error) {
-        alert("Erro ao buscar por clientes");
+        alert('Erro ao buscar por clientes');
       }
     };
 
     const fetchProducts = async () => {
       try {
-        const { data } = await api.get("/products");
+        const { data } = await api.get('/products');
         setProducts(
-          data.map((product) => {
+          data.map(product => {
             const { id, description } = product;
             return { key: id, value: product, text: description };
-          })
+          }),
         );
       } catch (error) {
-        alert("Erro ao buscar por produtos");
+        alert('Erro ao buscar por produtos');
       }
     };
     fetchCustomers();
@@ -57,7 +51,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
     const { id, description, price } = selectedProduct;
 
     if (order?.products.find(({ id: productId }) => productId === id)) {
-      return alert("Esse produto já está na lista!");
+      return alert('Esse produto já está na lista!');
     }
 
     setOrder({
@@ -77,13 +71,20 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
       if (id) {
         await api.put(`/orders/${id}`, order);
       } else {
-        await api.post("/orders", order);
+        await api.post('/orders', order);
       }
-      alert("Sucesso!");
+      alert('Sucesso!');
       if (afterSubmit) afterSubmit();
     } catch (error) {
-      alert("Erro ao cadastrar/alterar o pedido");
+      alert('Erro ao cadastrar/alterar o pedido');
     }
+  };
+
+  const handleTableDelete = product => {
+    setOrder({
+      ...order,
+      products: order.products.filter(({ id }) => product.id !== id),
+    });
   };
 
   return (
@@ -110,7 +111,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
           <Input
             type="number"
             label="Preço unitário"
-            value={selectedProduct?.price || ""}
+            value={selectedProduct?.price || ''}
             onChange={({ target }) =>
               setOrderProduct({ ...orderProduct, price: target.value })
             }
@@ -118,7 +119,7 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
           <Input
             type="number"
             label="Quantidade"
-            value={orderProduct?.quantity || ""}
+            value={orderProduct?.quantity || ''}
             onChange={({ target }) =>
               setOrderProduct({ ...orderProduct, quantity: target.value })
             }
@@ -141,41 +142,19 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
             Adicionar
           </Button>
         </Group>
-        <Table>
-          <Header>
-            <Row>
-              {columns?.map(({ name }) => (
-                <HeaderCell>{name}</HeaderCell>
-              ))}
-              <HeaderCell>Excluir</HeaderCell>
-            </Row>
-          </Header>
-          <Body>
-            {order?.products?.map((product) => (
-              <Row>
-                {columns?.map(({ path }) => (
-                  <Cell>
-                    <p>{product[path]}</p>
-                  </Cell>
-                ))}
-                <Cell>
-                  <TableButton
-                    onClick={() => {
-                      setOrder({
-                        ...order,
-                        products: order.products.filter(
-                          ({ id }) => product.id !== id
-                        ),
-                      });
-                    }}
-                  >
-                    <Icon name="close" color="red" />
-                  </TableButton>
-                </Cell>
-              </Row>
-            ))}
-          </Body>
-        </Table>
+
+        <Table
+          data={order?.products}
+          header={ORDER_PRODUCTS}
+          actions={[
+            {
+              label: 'Excluir',
+              icon: <Icon name="close" color="red" />,
+              onClick: handleTableDelete,
+            },
+          ]}
+        />
+
         <Button primary fluid onClick={handleSubmit}>
           Salvar
         </Button>

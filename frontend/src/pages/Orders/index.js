@@ -1,18 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Form, Table, Icon, Button } from "semantic-ui-react";
-import OrderForm from "../../components/forms/OrderForm";
-import { Modal, Container } from "../styles";
-import api from "../../components/services/api";
-import { TableButton } from "../../components/forms/styles";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Icon, Button } from 'semantic-ui-react';
+import OrderForm from '../../components/forms/OrderForm';
+import { Modal, Container } from '../styles';
+import api from '../../components/services/api';
+import { ORDERS } from '../../components/layout/Table/headerNames';
+import Table from '../../components/layout/Table';
 
-const { Body, Cell, Header, HeaderCell, Row } = Table;
-
-const columns = [
-  { name: "Cliente", render: ({ customer }) => customer },
-  { name: "Valor da Venda", render: ({ total }) => total },
-];
-
-const Orders = ({}) => {
+const Orders = () => {
   const [openModal, handleModal] = useState(false);
   const [orders, setOrders] = useState([]);
   const [selectedOrder, selectOrder] = useState({
@@ -22,23 +16,20 @@ const Orders = ({}) => {
 
   const loadOrders = useCallback(async () => {
     try {
-      const { data } = await api.get("/orders");
-      console.log(data)
+      const { data } = await api.get('/orders');
       setOrders(
         data.map(({ id, customer, sales, total }) => {
-          const products = sales.map(
-            ({ discount, price, product, quantity }) => {
-              const { description, manufacturer, id } = product || {};
-              return {
-                id,
-                discount: Number(discount),
-                price: Number(product?.price),
-                quantity: Number(quantity),
-                description,
-                manufacturer,
-              };
-            }
-          );
+          const products = sales.map(({ discount, product, quantity }) => {
+            const { description, manufacturer, id } = product || {};
+            return {
+              id,
+              discount: Number(discount),
+              price: Number(product?.price),
+              quantity: Number(quantity),
+              description,
+              manufacturer,
+            };
+          });
           return {
             id,
             customer_id: customer.id,
@@ -46,11 +37,10 @@ const Orders = ({}) => {
             products,
             total,
           };
-        })
+        }),
       );
     } catch (error) {
-      console.log(error);
-      alert("Erro ao buscar pedidos!");
+      alert('Erro ao buscar pedidos!');
     }
   }, []);
 
@@ -61,11 +51,16 @@ const Orders = ({}) => {
   const handleDelete = async ({ id }) => {
     try {
       await api.delete(`/orders/${id}`);
-      alert("Sucesso!");
-      setOrders(orders.filter((order) => order.id !== id));
+      alert('Sucesso!');
+      setOrders(orders.filter(order => order.id !== id));
     } catch (error) {
-      alert("Erro ao deletar pedido!");
+      alert('Erro ao deletar pedido!');
     }
+  };
+
+  const handleEdit = order => {
+    selectOrder(order);
+    handleModal(true);
   };
 
   return (
@@ -74,40 +69,23 @@ const Orders = ({}) => {
         <div>
           <Button onClick={() => handleModal(true)}>Cadastrar</Button>
         </div>
-        <Table celled textAlign="center">
-          <Header>
-            <Row>
-              {columns.map(({ name }) => (
-                <HeaderCell>{name}</HeaderCell>
-              ))}
-              <HeaderCell>Ações</HeaderCell>
-            </Row>
-          </Header>
-          <Body>
-            {orders.map((order) => (
-              <Row key={order.id}>
-                {columns.map(({ render }) => (
-                  <Cell>
-                    <p>{render(order)}</p>
-                  </Cell>
-                ))}
-                <Cell width={5}>
-                  <TableButton
-                    onClick={() => {
-                      selectOrder(order);
-                      handleModal(true);
-                    }}
-                  >
-                    <Icon name="pencil" color="orange" /> Editar
-                  </TableButton>
-                  <TableButton onClick={() => handleDelete(order)}>
-                    <Icon name="close" color="red" /> Excluir
-                  </TableButton>
-                </Cell>
-              </Row>
-            ))}
-          </Body>
-        </Table>
+
+        <Table
+          data={orders}
+          header={ORDERS}
+          actions={[
+            {
+              label: 'Editar',
+              icon: <Icon name="pencil" color="orange" />,
+              onClick: handleEdit,
+            },
+            {
+              label: 'Excluir',
+              icon: <Icon name="close" color="red" />,
+              onClick: handleDelete,
+            },
+          ]}
+        />
 
         <Modal
           open={openModal}

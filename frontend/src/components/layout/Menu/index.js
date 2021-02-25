@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import { Menu as SemanticMenu } from "semantic-ui-react";
-import { MenuContainer, Link } from "./styles";
+import React, { useState } from 'react';
+import { Menu as SemanticMenu } from 'semantic-ui-react';
+import { MenuContainer, Link } from './styles';
 
 const { Item } = SemanticMenu;
 
 const Menu = () => {
-  const [activeItem, setActive] = useState("");
+  const [activeItem, setActive] = useState('');
 
   const items = [
     {
-      name: "Dashboard",
-      to: "/",
+      name: 'Dashboard',
+      to: '/',
     },
     {
-      name: "Produtos",
-      to: "/products",
+      name: 'Produtos',
+      to: '/products',
     },
     {
-      name: "Clientes",
-      to: "/customers",
+      name: 'Clientes',
+      to: '/customers',
     },
     {
-      name: "Pedidos",
-      to: "/orders",
+      name: 'Pedidos',
+      to: '/orders',
     },
   ];
 
