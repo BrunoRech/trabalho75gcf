@@ -1,37 +1,32 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import CustomerForm from '../../components/forms/CustomerForm';
-import api from '../../components/services/api';
 import { Container, SmallModal as Modal } from '../styles';
 import Table from '../../components/layout/Table';
 import { CUSTOMERS } from '../../components/layout/Table/headerNames';
+import useApi from '../../hooks/useApi';
 
 const Customers = () => {
+  const { get, destroy } = useApi();
   const [openModal, handleModal] = useState(false);
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({});
 
   const loadCustomers = useCallback(async () => {
-    try {
-      const { data } = await api.get('/customers');
+    const { data } = await get('/customers');
+    if (data) {
       setCustomers(data);
-    } catch (error) {
-      alert('Ocorreu um erro ao buscar por produtos');
     }
-  }, []);
+  }, [get]);
 
   useEffect(() => {
     loadCustomers();
   }, [loadCustomers]);
 
   const handleDelete = async ({ id }) => {
-    try {
-      await api.delete(`/customers/${id}`);
-      setCustomers(customers.filter(prod => prod.id !== id));
-      alert('Sucesso!');
-    } catch (error) {
-      alert('Ocorreu um erro ao deletar produto');
-    }
+    await destroy(`/customers/${id}`, 'Cliente Deletado com Sucesso!', () =>
+      setCustomers(customers.filter(prod => prod.id !== id)),
+    );
   };
 
   const handleEdit = customer => {

@@ -1,26 +1,32 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import { Container } from './styles';
-import api from '../services/api';
+import useApi from '../../hooks/useApi';
 
 const { Input, Button, Group } = Form;
 
 const CustomerForm = ({ customer: selectedCustomer, afterSubmit }) => {
   const [customer, setCustomer] = useState(selectedCustomer);
+  const { put, post } = useApi();
 
   const handleSubmit = async () => {
-    try {
-      const { id } = customer;
-      if (id) {
-        await api.put(`/customers/${id}`, customer);
-      } else {
-        await api.post('/customers', customer);
-      }
-      alert('Sucesso!');
-      if (afterSubmit) afterSubmit();
-    } catch (error) {
-      alert('Erro ao cadastrar/alterar o cliente');
+    const { id } = customer;
+    let response;
+    if (id) {
+      response = await put(
+        `/customers/${id}`,
+        customer,
+        selectedCustomer,
+        'Cliente Alterado com Sucesso!',
+      );
+    } else {
+      response = await post(
+        '/customers',
+        customer,
+        'Cliente Criado com Sucesso!',
+      );
     }
+    if (afterSubmit && response.data) afterSubmit();
   };
 
   return (

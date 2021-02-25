@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Icon } from 'semantic-ui-react';
 import { ORDER_PRODUCTS } from '../layout/Table/headerNames';
+import useApi from '../../hooks/useApi';
 import { Container } from './styles';
-import api from '../services/api';
 import Table from '../layout/Table';
 
 const { Input, Button, Select, Group } = Form;
 
 const OrderForm = ({ afterSubmit, order, setOrder }) => {
+  const { get, post, put } = useApi();
   const [customers, setCustomers] = useState([]);
   const [customersList, setCustomersList] = useState([]);
   const [products, setProducts] = useState([]);
@@ -17,35 +18,31 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      try {
-        const { data } = await api.get('/customers');
+      const { data } = await get('/customers');
+      if (data) {
         setCustomersList(data);
         setCustomers(
           data.map(({ id, name }) => {
             return { key: id, value: id, text: name };
           }),
         );
-      } catch (error) {
-        alert('Erro ao buscar por clientes');
       }
     };
 
     const fetchProducts = async () => {
-      try {
-        const { data } = await api.get('/products');
+      const { data } = await get('/products');
+      if (data) {
         setProducts(
           data.map(product => {
             const { id, description } = product;
             return { key: id, value: product, text: description };
           }),
         );
-      } catch (error) {
-        alert('Erro ao buscar por produtos');
       }
     };
     fetchCustomers();
     fetchProducts();
-  }, []);
+  }, [get]);
 
   const addProduct = () => {
     const { id, description, price } = selectedProduct;
@@ -66,18 +63,19 @@ const OrderForm = ({ afterSubmit, order, setOrder }) => {
   };
 
   const handleSubmit = async () => {
-    try {
-      const { id } = order || {};
-      if (id) {
-        await api.put(`/orders/${id}`, order);
-      } else {
-        await api.post('/orders', order);
-      }
-      alert('Sucesso!');
-      if (afterSubmit) afterSubmit();
-    } catch (error) {
-      alert('Erro ao cadastrar/alterar o pedido');
+    let response;
+    const { id } = order || {};
+    if (id) {
+      response = await put(
+        `/orders/${id}`,
+        order,
+        'Pedido Alterado com Sucesso!',
+      );
+    } else {
+      response = await post('/orders', order, 'Pedido Criado com Sucesso!');
     }
+
+    if (afterSubmit && response.data) afterSubmit();
   };
 
   const handleTableDelete = product => {

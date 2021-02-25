@@ -1,6 +1,4 @@
-import Dashboard from './Dashboard';
-import Products from './Products';
-import Customers from './Customers';
-import Orders from './Orders';
-
-export { Dashboard, Products, Customers, Orders };
+export { default as Dashboard } from './Dashboard';
+export { default as Products } from './Products';
+export { default as Customers } from './Customers';
+export { default as Orders } from './Orders';

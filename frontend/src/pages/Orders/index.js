@@ -2,11 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Icon, Button } from 'semantic-ui-react';
 import OrderForm from '../../components/forms/OrderForm';
 import { Modal, Container } from '../styles';
-import api from '../../components/services/api';
 import { ORDERS } from '../../components/layout/Table/headerNames';
 import Table from '../../components/layout/Table';
+import useApi from '../../hooks/useApi';
 
 const Orders = () => {
+  const { get, destroy } = useApi();
   const [openModal, handleModal] = useState(false);
   const [orders, setOrders] = useState([]);
   const [selectedOrder, selectOrder] = useState({
@@ -15,8 +16,8 @@ const Orders = () => {
   });
 
   const loadOrders = useCallback(async () => {
-    try {
-      const { data } = await api.get('/orders');
+    const { data } = await get('/orders');
+    if (data) {
       setOrders(
         data.map(({ id, customer, sales, total }) => {
           const products = sales.map(({ discount, product, quantity }) => {
@@ -39,23 +40,17 @@ const Orders = () => {
           };
         }),
       );
-    } catch (error) {
-      alert('Erro ao buscar pedidos!');
     }
-  }, []);
+  }, [get]);
 
   useEffect(() => {
     loadOrders();
   }, [loadOrders]);
 
   const handleDelete = async ({ id }) => {
-    try {
-      await api.delete(`/orders/${id}`);
-      alert('Sucesso!');
-      setOrders(orders.filter(order => order.id !== id));
-    } catch (error) {
-      alert('Erro ao deletar pedido!');
-    }
+    await destroy(`/orders/${id}`, 'Pedido Deletado com Sucesso!', () =>
+      setOrders(orders.filter(order => order.id !== id)),
+    );
   };
 
   const handleEdit = order => {

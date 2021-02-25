@@ -3,35 +3,30 @@ import { Modal, Button, Icon } from 'semantic-ui-react';
 import ProductForm from '../../components/forms/ProductForm';
 import { PRODUCTS } from '../../components/layout/Table/headerNames';
 import Table from '../../components/layout/Table';
-import api from '../../components/services/api';
 import { Container } from '../styles';
+import useApi from '../../hooks/useApi';
 
 const Products = () => {
+  const { get, destroy } = useApi();
   const [openModal, handleModal] = useState(false);
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState({});
 
   const loadProducts = useCallback(async () => {
-    try {
-      const { data } = await api.get('/products');
+    const { data } = await get('/products');
+    if (data) {
       setProducts(data);
-    } catch (error) {
-      alert('Ocorreu um erro ao buscar por produtos');
     }
-  }, []);
+  }, [get]);
 
   useEffect(() => {
     loadProducts();
   }, [loadProducts]);
 
   const handleDelete = async ({ id }) => {
-    try {
-      await api.delete(`/products/${id}`);
-      setProducts(products.filter(prod => prod.id !== id));
-      alert('Sucesso!');
-    } catch (error) {
-      alert('Ocorreu um erro ao deletar produto');
-    }
+    await destroy(`/products/${id}`, 'Produto Deletado com Sucesso!', () =>
+      setProducts(products.filter(prod => prod.id !== id)),
+    );
   };
 
   const handleEdit = product => {

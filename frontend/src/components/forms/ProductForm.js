@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
+import useApi from '../../hooks/useApi';
 import { Container } from './styles';
-import api from '../services/api';
 
 const { Input, Button, TextArea } = Form;
 
 const ProductForm = ({ product, afterSubmit }) => {
+  const { put, post } = useApi();
   const [manufacturer, setManufacturer] = useState(product.manufacturer);
   const [description, setDescription] = useState(product.description);
   const [price, setPrice] = useState(product.price);
 
   const handleSubmit = async () => {
-    try {
-      const productSubmit = { manufacturer, description, price };
-      const { id } = product;
-      if (id) {
-        await api.put(`/products/${id}`, productSubmit);
-      } else {
-        await api.post('/products', productSubmit);
-      }
-      alert('Sucesso!');
-      if (afterSubmit) afterSubmit();
-    } catch (error) {
-      alert('Erro ao cadastrar/alterar o produto');
+    const productSubmit = { manufacturer, description, price };
+    const { id } = product;
+    let response;
+    if (id) {
+      response = await put(
+        `/products/${id}`,
+        productSubmit,
+        'Produto Alterado com Sucesso!',
+      );
+    } else {
+      response = await post(
+        '/products',
+        productSubmit,
+        'Produto Criado com Sucesso!',
+      );
     }
+
+    if (afterSubmit && response.data) afterSubmit();
   };
 
   return (
